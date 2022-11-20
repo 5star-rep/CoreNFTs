@@ -1278,12 +1278,13 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
         _transfer(address(this), msg.sender, tokenId);
     }
 
-    function mint()
+    function mint(address to, uint256 _mintAmount)
         public
         payable    
     {
         GetMintID[msg.sender] = Supply;
         require(isMintEnabled, "Mint not enabled");
+        require(_mintAmount == 1, "MintAmount should be 1");
         require(Maxsupply > Supply, "Max supply exausted");
         require(msg.value == Cost, "Wrong value");
         Devs.transfer(Devshare);
@@ -1292,7 +1293,7 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
         total_value -= Devshare;
         Supply++;
         uint256 tokenId = Supply;
-        _safeMint(msg.sender, tokenId);
+        _safeMint(to, tokenId);
         _setTokenURI(tokenId, uri);
     }
 
