@@ -1228,7 +1228,7 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
 
     // As long as the Blockchain itself remains up and running, I can guarantee
     // we are right on a safe boat. Bank is hack resistant
-    constructor(address payable devs, string memory ur) payable ERC721("EMPEROR", "EMPEROR") {
+    constructor(address payable devs, string memory ur) payable ERC721("BANK", "BANK") {
         Devs = devs;
         uri = ur;
         total_value = msg.value;
