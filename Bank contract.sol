@@ -1208,13 +1208,13 @@ pragma solidity ^0.8.4;
 // A new system of Web3 banking
 contract BANK is ERC721, ERC721URIStorage, Ownable {
 
-    address payable private Banks;
+    address payable private Devs;
     uint total_value;
     uint256 public Maxsupply = 100000;
     uint256 public Supply;
     uint256 public Cost = 2.0005 ether;
     uint256 public WithdrawCost = 2 ether;
-    uint256 public BankShare = 0.0005 ether;
+    uint256 public DevShare = 0.0005 ether;
     string memory uri;
 
     bool public isMintEnabled;
@@ -1228,8 +1228,8 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
 
     // As long as the Blockchain itself remains up and running, I can guarantee
     // we are right on a safe boat. Bank is hack resistant
-    constructor(address payable banks, string memory ur) payable ERC721("EMPEROR", "EMPEROR") {
-        Banks = banks;
+    constructor(address payable devs, string memory ur) payable ERC721("EMPEROR", "EMPEROR") {
+        Devs = devs;
         uri = ur;
         total_value = msg.value;
     }
@@ -1286,7 +1286,10 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
         require(isMintEnabled, "Mint not enabled");
         require(Maxsupply > Supply, "Max supply exausted");
         require(msg.value == Cost, "Wrong value");
+        Devs.transfer(Devshare);
 
+        total_value += msg.value;
+        total_value -= Devshare;
         Supply++;
         uint256 tokenId = Supply;
         _safeMint(msg.sender, tokenId);
