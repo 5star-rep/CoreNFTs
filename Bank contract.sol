@@ -1208,15 +1208,12 @@ pragma solidity ^0.8.4;
 // A new system of Web3 banking
 contract BANK is ERC721, ERC721URIStorage, Ownable {
 
-    address payable private Devs;
     uint total_value;
-    uint256 public Maxsupply = 100000;
+    uint256 public Maxsupply = 1000000000;
     uint256 public Supply;
-    uint256 public Cost = 2.0005 ether;
+    uint256 public Cost = 2 ether;
     uint256 public WithdrawCost = 2 ether;
-    uint256 public DevShare = 0.0005 ether;
     string memory uri;
-
     bool public isMintEnabled;
 
     mapping(uint256 => bool) public isWithdrawnID;
@@ -1228,8 +1225,7 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
 
     // As long as the Blockchain itself remains up and running, I can guarantee
     // we are right on a safe boat. Bank is hack resistant
-    constructor(address payable devs, string memory ur) payable ERC721("BANK", "BANK") {
-        Devs = devs;
+    constructor(string memory ur) payable ERC721("BANK", "BANK") {
         uri = ur;
         total_value = msg.value;
     }
@@ -1257,7 +1253,7 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
         require(payable(msg.sender).send(WithdrawCost));
 
         total_value -= WithdrawCost;
-        _transfer(msg.sender, address(0), tokenId);
+        _burn(tokenId);
     }
 
     function LockNft(uint256 tokenId, uint256 passcode) public {
@@ -1287,10 +1283,8 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
         require(_mintAmount == 1, "MintAmount should be 1");
         require(Maxsupply > Supply, "Max supply exausted");
         require(msg.value == Cost, "Wrong value");
-        Devs.transfer(Devshare);
 
         total_value += msg.value;
-        total_value -= Devshare;
         Supply++;
         uint256 tokenId = Supply;
         _safeMint(to, tokenId);
