@@ -1208,10 +1208,12 @@ pragma solidity ^0.8.4;
 // A new system of Web3 banking
 contract BANK is ERC721, ERC721URIStorage, Ownable {
 
+    address payable private Devs;
     uint total_value;
-    uint256 public Maxsupply = 1000000000;
+    uint256 public Maxsupply = 10000;
     uint256 public Supply;
-    uint256 public Cost = 2 ether;
+    uint256 public Cost = 3 ether;
+    uint256 public DevsShare = 1 ether;
     uint256 public WithdrawCost = 2 ether;
     string memory uri;
     bool public isMintEnabled;
@@ -1225,7 +1227,8 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
 
     // As long as the Blockchain itself remains up and running, I can guarantee
     // we are right on a safe boat. Bank is hack resistant
-    constructor(string memory ur) payable ERC721("BANK", "BANK") {
+    constructor(address payable devs, string memory ur) payable ERC721("BANK", "BANK") {
+        Devs = devs;
         uri = ur;
         total_value = msg.value;
     }
@@ -1283,7 +1286,9 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
         require(_mintAmount == 1, "MintAmount should be 1");
         require(Maxsupply > Supply, "Max supply exausted");
         require(msg.value == Cost, "Wrong value");
+        Devs.transfer(DevsShare);
 
+        total_value -= DevsShare;
         total_value += msg.value;
         Supply++;
         uint256 tokenId = Supply;
@@ -1295,14 +1300,5 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
 
     function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
         super._burn(tokenId);
-    }
-
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        override(ERC721, ERC721URIStorage)
-        returns (string memory)
-    {
-        return super.tokenURI(tokenId);
     }
 }
