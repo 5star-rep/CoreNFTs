@@ -1208,6 +1208,8 @@ pragma solidity ^0.8.4;
 // A new system of Web3 banking
 contract BANK is ERC721, ERC721URIStorage, Ownable {
 
+    string public baseUri;
+    string public baseExtension = ".json"; 
     address payable private Devs;
     uint total_value;
     uint256 public Maxsupply = 10000;
@@ -1215,7 +1217,6 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
     uint256 public Cost = 3 ether;
     uint256 public DevsShare = 1 ether;
     uint256 public WithdrawCost = 2 ether;
-    string memory uri;
     bool public isMintEnabled;
 
     mapping(uint256 => bool) public isWithdrawnID;
@@ -1229,7 +1230,7 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
     // we are right on a safe boat. Bank is hack resistant
     constructor(address payable devs, string memory ur) payable ERC721("BANK", "BANK") {
         Devs = devs;
-        uri = ur;
+        SetbaseUri(ur);
         total_value = msg.value;
     }
 
@@ -1275,6 +1276,10 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
 
         LockedNft[tokenId] = 0;
         _transfer(address(this), msg.sender, tokenId);
+    }
+
+    function _baseUri() internal view virtual override returns (string memory) {
+        return baseUri;
     }
 
     function mint(address to, uint256 _mintAmount)
