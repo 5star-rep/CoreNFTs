@@ -1208,7 +1208,7 @@ pragma solidity ^0.8.4;
 // A new system of Web3 banking
 contract BANK is ERC721, ERC721URIStorage, Ownable {
 
-    string public baseUri;
+    string public baseURI;
     string public baseExtension = ".json"; 
     address payable private Devs;
     uint total_value;
@@ -1230,7 +1230,7 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
     // we are right on a safe boat. Bank is hack resistant
     constructor(address payable devs, string memory ur) payable ERC721("BANK", "BANK") {
         Devs = devs;
-        SetbaseUri(ur);
+        setBaseURI(ur);
         total_value = msg.value;
     }
 
@@ -1278,8 +1278,8 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
         _transfer(address(this), msg.sender, tokenId);
     }
 
-    function _baseUri() internal view virtual override returns (string memory) {
-        return baseUri;
+    function _baseURI() internal view virtual override returns (string memory) {
+        return baseURI;
     }
 
     function mint(address to, uint256 _mintAmount)
@@ -1295,10 +1295,8 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
 
         total_value -= DevsShare;
         total_value += msg.value;
-        Supply++;
-        uint256 tokenId = Supply;
-        _safeMint(to, tokenId);
-        _setTokenURI(tokenId, uri);
+        uint256 Supply = totalSupply();
+        _safeMint(to, Supply);
     }
 
     // The following functions are overrides required by Solidity.
