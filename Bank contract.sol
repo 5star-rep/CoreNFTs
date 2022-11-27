@@ -1207,6 +1207,7 @@ pragma solidity ^0.8.4;
 
 // A new system of Web3 banking
 contract BANK is ERC721, ERC721URIStorage, Ownable {
+    using String for uint256
 
     string public baseURI;
     string public baseExtension = ".json"; 
@@ -1290,7 +1291,7 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
         require(isMintEnabled, "Mint not enabled");
         require(_mintAmount == 1, "MintAmount should be 1");
         require(Maxsupply > Supply, "Max supply exausted");
-        require(msg.value == Cost, "Wrong value");
+        require(msg.value >= Cost, "Wrong value");
         Devs.transfer(DevsShare);
 
         total_value -= DevsShare;
