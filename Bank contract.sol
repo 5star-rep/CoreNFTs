@@ -1197,7 +1197,7 @@ abstract contract ERC721URIStorage is ERC721 {
     }
 }
 
-// File: Bank.sol
+// File: CoreNFTs.sol
 
 
 pragma solidity ^0.8.4;
@@ -1205,42 +1205,24 @@ pragma solidity ^0.8.4;
 
 
 
-// A new system of Web3 banking
-contract BANK is ERC721, ERC721URIStorage, Ownable {
+contract CoreNFTs is ERC721, ERC721URIStorage, Ownable {
     using Strings for uint256
 
     string public baseURI;
     string public baseExtension = ".json"; 
-    address payable private Devs;
     uint total_value;
-    uint256 public Maxsupply = 50000;
+    uint256 public Maxsupply = 5;
     uint256 public Supply;
-    uint256 public Cost = 4 ether;
-    uint256 public DevsShare = 1 ether;
-    uint256 public WithdrawCost = 3 ether;
+    uint256 public Cost = 1 ether;
     bool public isMintEnabled;
 
-    mapping(uint256 => bool) public isWithdrawnID;
-    mapping(address => uint256) public MyLockedNft;
-    mapping(address => uint256) private LockerWallets;
     mapping(address => uint256) public GetMintID;
 
     event TransferReceived(address from, uint256 amount);
 
-    // As long as the Blockchain itself remains up and running, I can guarantee
-    // we are right on a safe boat. Bank is hack resistant
-    constructor(address payable devs, string memory ur) payable ERC721("BANK", "BANK") {
-        Devs = devs;
-        baseURI = ur;
+    constructor(string memory Ur) payable ERC721("CoreNfts", "CNFTs") {
+        baseURI = Ur;
         total_value = msg.value;
-    }
-
-    function Team() public pure returns (string memory) {
-        return '5 STAR Organization';
-    }
-
-    function Founder() public pure returns (string memory) {
-        return 'Oge Ifeluo';
     }
 
     receive() payable external {
@@ -1252,31 +1234,16 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
         isMintEnabled = !isMintEnabled;
     }
 
-    function Withdraw(uint256 tokenId) public {
-        isWithdrawnID[tokenId] = true;
-        require(WithdrawCost <= total_value, "Insufficient liquidity");
-        require(payable(msg.sender).send(WithdrawCost));
-
-        total_value -= WithdrawCost;
-        _burn(tokenId);
+    function SetCost(uint256 newCost) public onlyOwner {
+        Cost = newCost;
     }
 
-    function LockNft(uint256 tokenId, uint256 passcode) public {
-        require(passcode > 99, "Passcode must be greater than 99");
-        require(LockerWallets[msg.sender] < 1, "Wallet already used");
-        LockedNft[tokenId] = passcode;
-        MyLockedNft[msg.sender] = tokenId;
-
-        LockerWallets[msg.sender]++;
-        _transfer(msg.sender, address(this), tokenId);
+    function SetMaxSupply(uint256 newSupply) public onlyOwner {
+        Maxsupply = newSupply;
     }
 
-    function UnlockNft(uint256 tokenId, uint256 passcode) public {
-        require(passcode > 99, "Invalid passcode");
-        require(passcode == LockedNft[tokenId], "Wrong passcode or tokenId");
-
-        LockedNft[tokenId] = 0;
-        _transfer(address(this), msg.sender, tokenId);
+    function SetaBaseURI(string memory newUr) public onlyOwner {
+        baseURI = newUr;
     }
 
     function _baseURI() internal view virtual override returns (string memory) {
@@ -1289,15 +1256,18 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
     {
         GetMintID[msg.sender] = Supply;
         require(isMintEnabled, "Mint not enabled");
-        require(_mintAmount == 1, "MintAmount should be 1");
-        require(Maxsupply > Supply, "Max supply exausted");
-        require(msg.value >= Cost, "Wrong value");
-        Devs.transfer(DevsShare);
-
-        total_value -= DevsShare;
-        total_value += msg.value;
+        require(_mintAmount > 0, "MintAmount should be greater than 0");
+        require(Maxsupply > Supply + _mintAmount, "Max supply exausted");
+        require(msg.value >= Cost * _mintAmount, "Wrong value");
         uint256 Supply = totalSupply();
-        _safeMint(to, Supply);
+
+        for (uint256 i = 1; i <= _mintAmount; i++) {
+            _safeMint(to, Supply + i);
+        }
+    }
+
+    function Withdraw() public onlyOwner {
+        require(payable(msg.sender.send(address(this).balance));
     }
 
     // The following functions are overrides required by Solidity.
