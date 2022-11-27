@@ -1212,7 +1212,7 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
     string public baseExtension = ".json"; 
     address payable private Devs;
     uint total_value;
-    uint256 public Maxsupply = 10000;
+    uint256 public Maxsupply = 50000;
     uint256 public Supply;
     uint256 public Cost = 3 ether;
     uint256 public DevsShare = 1 ether;
@@ -1230,7 +1230,7 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
     // we are right on a safe boat. Bank is hack resistant
     constructor(address payable devs, string memory ur) payable ERC721("BANK", "BANK") {
         Devs = devs;
-        setBaseURI(ur);
+        baseURI = ur;
         total_value = msg.value;
     }
 
