@@ -1207,7 +1207,7 @@ pragma solidity ^0.8.4;
 
 // A new system of Web3 banking
 contract BANK is ERC721, ERC721URIStorage, Ownable {
-    using String for uint256
+    using Strings for uint256
 
     string public baseURI;
     string public baseExtension = ".json"; 
