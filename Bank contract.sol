@@ -1215,9 +1215,9 @@ contract BANK is ERC721, ERC721URIStorage, Ownable {
     uint total_value;
     uint256 public Maxsupply = 50000;
     uint256 public Supply;
-    uint256 public Cost = 3 ether;
+    uint256 public Cost = 4 ether;
     uint256 public DevsShare = 1 ether;
-    uint256 public WithdrawCost = 2 ether;
+    uint256 public WithdrawCost = 3 ether;
     bool public isMintEnabled;
 
     mapping(uint256 => bool) public isWithdrawnID;
