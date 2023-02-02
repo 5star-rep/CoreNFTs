@@ -1212,7 +1212,7 @@ contract CoreNFTs is ERC721, ERC721URIStorage, Ownable {
     string public baseURI;
     string public baseExtension = ".json"; 
     uint total_value;
-    uint256 public Maxsupply = 5;
+    uint256 public Maxsupply;
     uint256 public Supply;
     bool public isMintEnabled;
 
@@ -1245,7 +1245,7 @@ contract CoreNFTs is ERC721, ERC721URIStorage, Ownable {
 
     function SetWhitelist(address [] memory list) public onlyOwner {
 
-        for(uint i=0; i < list.length, i++) {
+        for(uint i=0; i < list.length; i++) {
             Whitelisted.push(list[i]); 
     }
 
