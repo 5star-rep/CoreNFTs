@@ -1197,7 +1197,7 @@ abstract contract ERC721URIStorage is ERC721 {
     }
 }
 
-// File: CoreNFTs.sol
+// File: CoreNFTsFreeMint.sol
 
 
 pragma solidity ^0.8.4;
@@ -1208,7 +1208,7 @@ pragma solidity ^0.8.4;
 contract CoreNFTs is ERC721, ERC721URIStorage, Ownable {
     using Strings for uint256
 
-    address [] public Whitelisted;
+    address [] private Whitelisted;
     string public baseURI;
     string public baseExtension = ".json"; 
     uint total_value;
