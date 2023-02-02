@@ -1237,7 +1237,7 @@ contract CoreNFTs is ERC721, ERC721URIStorage, Ownable {
 
     function SetWhitelist(address [] memory list) public onlyOwner {
 
-        for(uint i = 0, i < list.length, i++) {
+        for(uint i=0; i < list.length, i++) {
             Whitelisted.push(list[i]); 
     }
 
