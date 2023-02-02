@@ -1231,6 +1231,14 @@ contract CoreNFTs is ERC721, ERC721URIStorage, Ownable {
         emit TransferReceived(msg.sender, msg.value);
     }
 
+    function Team() public pure returns (string memory) {
+        return '5 STAR Organization';
+    }
+
+    function Founder() public pure returns (string memory) {
+        return 'Oge Ifeluo';
+    }
+
     function EnableMint() public onlyOwner {
         isMintEnabled = !isMintEnabled;
     }
