@@ -1219,7 +1219,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
 
     event TransferReceived(address from, uint256 amount);
 
-    constructor() payable ERC721("CORENFTS", "CNFTS") {
+    constructor() payable ERC721("CORENFTS", "CNFTs") {
         total_value = msg.value;
     }
 
