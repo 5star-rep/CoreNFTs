@@ -1203,10 +1203,7 @@ abstract contract ERC721URIStorage is ERC721 {
 pragma solidity ^0.8.4;
 
 
-
-
-// A new system of Web3 finance
-contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
+contract CoreNfts is ERC721, ERC721URIStorage, Ownable {
 
     address [] private Whitelisted;
     uint total_value;
@@ -1219,7 +1216,7 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
 
     event TransferReceived(address from, uint256 amount);
 
-    constructor() payable ERC721("CORENFTS", "CNFTs") {
+    constructor() payable ERC721("CoreNfts", "CNFTs") {
         total_value = msg.value;
     }
 
@@ -1244,8 +1241,8 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
         isMintEnabled = !isMintEnabled;
     }
 
-    function SetMaxSupply(uint256 supply) public onlyOwner {
-        Maxsupply = supply;
+    function SetMaxSupply(uint256 newSupply) public onlyOwner {
+        Maxsupply = newSupply;
     }
 
     function SetWhitelist(address [] memory list) public onlyOwner {
