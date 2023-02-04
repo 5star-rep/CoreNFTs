@@ -1251,7 +1251,7 @@ contract CoreNfts is ERC721, ERC721URIStorage, Ownable {
             Whitelisted.push(list[i]);
     }
 
-    function mint(address _to, uint256 _mintAmount) payable public {
+    function mint(address _to, uint256 _mintAmount) public {
         require(isMintEnabled, "Minting not enabled");
         require(Minted[msg.sender] < 1, "Caller already minted");
         require(msg.sender == Whitelisted, "Caller not Whitelisted");
