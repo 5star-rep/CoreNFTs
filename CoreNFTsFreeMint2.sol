@@ -1197,7 +1197,7 @@ abstract contract ERC721URIStorage is ERC721 {
     }
 }
 
-// File: Emperors.sol
+// File: CoreNftsFreeMint2.sol
 
 
 pragma solidity ^0.8.4;
