@@ -1208,22 +1208,24 @@ pragma solidity ^0.8.4;
 contract CoreNFTs is ERC721, ERC721URIStorage, Ownable {
     using Strings for uint256
 
-    address [] private Whitelisted;
     string public baseURI;
     string public baseExtension = ".json"; 
     uint total_value;
     uint256 public Maxsupply;
     uint256 public Supply;
+    uint256 public MintTimes;
     bool public isMintEnabled;
 
     mapping(address => uint256) public GetMintID;
     mapping(address => uint256) public Minted;
+    mapping(address => bool) public Whitelisted;
 
     event TransferReceived(address from, uint256 amount);
 
     constructor(string memory Ur) payable ERC721("CoreNfts", "CNFTs") {
         baseURI = Ur;
         total_value = msg.value;
+        MintTimes = 1;
     }
 
     receive() payable external {
@@ -1246,7 +1248,11 @@ contract CoreNFTs is ERC721, ERC721URIStorage, Ownable {
     function SetWhitelist(address [] memory list) public onlyOwner {
 
         for(uint i=0; i < list.length; i++) {
-            Whitelisted.push(list[i]); 
+            Whitelisted[list[i]] = true; 
+    }
+
+    function SetMintTimes(uint256 _times) public onlyOwner {
+        MintTimes = _times;
     }
 
     function SetMaxSupply(uint256 newSupply) public onlyOwner {
@@ -1265,8 +1271,8 @@ contract CoreNFTs is ERC721, ERC721URIStorage, Ownable {
         public   
     {
         GetMintID[msg.sender] = Supply;
-        require(Minted[msg.sender] < 1, "Caller already minted");
-        require(msg.sender == Whitelisted, "Caller not Whitelisted");
+        require(Minted[msg.sender] < MintTimes, "Caller already minted");
+        require(Whitelisted[msg.sender] == true, "Caller not Whitelisted");
         require(isMintEnabled, "Mint not enabled");
         require(_mintAmount == 1, "MintAmount should be 1");
         require(Maxsupply > Supply + _mintAmount, "Max supply exausted");
