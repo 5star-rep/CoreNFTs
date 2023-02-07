@@ -1209,7 +1209,7 @@ contract CoreNfts is ERC721, ERC721URIStorage, Ownable {
     uint256 public Maxsupply;
     uint256 public Supply;
     uint256 public IDs;
-    uint256 public MintAmount;
+    uint256 public MintTimes;
     bool public isMintEnabled;
 
     mapping(address => uint256) public Minted;
@@ -1219,7 +1219,7 @@ contract CoreNfts is ERC721, ERC721URIStorage, Ownable {
 
     constructor() payable ERC721("CoreNfts", "CNFTs") {
         total_value = msg.value;
-        MintAmount = 1;
+        MintTimes = 1;
     }
 
     function Team() public pure returns (string memory) {
@@ -1253,14 +1253,14 @@ contract CoreNfts is ERC721, ERC721URIStorage, Ownable {
             Whitelisted[list[i]] = true;
     }
 
-    function SetMintAmount(uint256 amount) public onlyOwner {
-        MintAmount = amount;
+    function SetMintTimes(uint256 _times) public onlyOwner {
+        MintTimes = _times;
     }
 
     function mint(address _to, uint256 _mintAmount) public {
         require(isMintEnabled, "Minting not enabled");
-        require(Minted[msg.sender] < MintAmount, "Caller already minted");
-        require(Whitelisted[msg.sender] = true, "Caller not Whitelisted");
+        require(Minted[msg.sender] < MintTimes, "Caller already minted");
+        require(Whitelisted[msg.sender] == true, "Caller not Whitelisted");
         require(_mintAmount == 1, "MintAmount should be 1");
         require(Maxsupply > Supply, "Max supply exhausted");
 
