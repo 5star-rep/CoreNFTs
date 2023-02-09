@@ -1212,6 +1212,8 @@ contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
     uint256 public Cost = 1 ether;
     bool public isMintEnabled;
 
+    mapping(uint256 => string) private tokenUri;
+
     event TransferReceived(address from, uint256 amount);
 
     constructor() payable ERC721("EMPEROR", "EMPEROR") {
