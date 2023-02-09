@@ -1197,29 +1197,25 @@ abstract contract ERC721URIStorage is ERC721 {
     }
 }
 
-// File: CoreNftsFreeMint2.sol
+// File EmperorsContract.sol
 
 
 pragma solidity ^0.8.4;
 
 
-contract CoreNfts is ERC721, ERC721URIStorage, Ownable {
+contract EMPERORS is ERC721, ERC721URIStorage, Ownable {
 
     uint total_value;
-    uint256 public Maxsupply;
+    uint256 public Maxsupply = 1000;
     uint256 public Supply;
     uint256 public IDs;
-    uint256 public MintTimes;
+    uint256 public Cost = 1 ether;
     bool public isMintEnabled;
-
-    mapping(address => uint256) public Minted;
-    mapping(address => bool) public Whitelisted;
 
     event TransferReceived(address from, uint256 amount);
 
-    constructor() payable ERC721("CoreNfts", "CNFTs") {
+    constructor() payable ERC721("EMPEROR", "EMPEROR") {
         total_value = msg.value;
-        MintTimes = 1;
     }
 
     function Team() public pure returns (string memory) {
@@ -1243,29 +1239,13 @@ contract CoreNfts is ERC721, ERC721URIStorage, Ownable {
         isMintEnabled = !isMintEnabled;
     }
 
-    function SetMaxSupply(uint256 newSupply) public onlyOwner {
-        Maxsupply = newSupply;
-    }
-
-    function SetWhitelist(address [] memory list) public onlyOwner {
-     
-        for(uint i=0; i < list.length; i++) {
-            Whitelisted[list[i]] = true;
-    }
-
-    function SetMintTimes(uint256 _times) public onlyOwner {
-        MintTimes = _times;
-    }
-
-    function mint(address _to, uint256 _mintAmount) public {
+    function mint(address _to, uint256 _mintAmount) public payable {
         require(isMintEnabled, "Minting not enabled");
-        require(Minted[msg.sender] < MintTimes, "Caller already minted");
-        require(Whitelisted[msg.sender] == true, "Caller not Whitelisted");
+        require(msg.value == Cost, "Wrong value");
         require(_mintAmount == 1, "MintAmount should be 1");
         require(Maxsupply > Supply, "Max supply exhausted");
 
         Supply++;
-        Minted[msg.sender]++;
         uint256 tokenId = Supply;
         _safeMint(_to, tokenId);
         _setTokenURI(tokenId, tokenUri[tokenId]);
@@ -1277,6 +1257,10 @@ contract CoreNfts is ERC721, ERC721URIStorage, Ownable {
     {
         IDs++;
         tokenUri[tokenId] = uri;
+    }
+
+    function withdraw() public onlyOwner {
+        require(payable(msg.sender).send(address(this).balance));
     }
 
     // The following functions are overrides required by Solidity.
