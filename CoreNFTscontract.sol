@@ -1208,7 +1208,7 @@ pragma solidity ^0.8.4;
 contract Degods is ERC721, ERC721URIStorage, Ownable {
     using Strings for uint256
 
-    address payable Devs;
+    address payable private Devs;
     string public baseURI;
     string public baseExtension = ".json"; 
     uint total_value;
