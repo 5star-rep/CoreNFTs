@@ -1205,22 +1205,25 @@ pragma solidity ^0.8.4;
 
 
 
-contract CoreNFTs is ERC721, ERC721URIStorage, Ownable {
+contract Degods is ERC721, ERC721URIStorage, Ownable {
     using Strings for uint256
 
+    address payable Devs;
     string public baseURI;
     string public baseExtension = ".json"; 
     uint total_value;
-    uint256 public Maxsupply = 5;
+    uint256 public Maxsupply = 10000;
     uint256 public Supply;
     uint256 public Cost = 1 ether;
+    uint256 public Share = 1 ether;
     bool public isMintEnabled;
 
     mapping(address => uint256) public GetMintID;
 
     event TransferReceived(address from, uint256 amount);
 
-    constructor(string memory Ur) payable ERC721("CoreNfts", "CNFTs") {
+    constructor(address payable devs, string memory Ur) payable ERC721("Degods", "gods") {
+        Devs = devs;
         baseURI = Ur;
         total_value = msg.value;
     }
@@ -1260,6 +1263,9 @@ contract CoreNFTs is ERC721, ERC721URIStorage, Ownable {
         require(Maxsupply > Supply + _mintAmount, "Max supply exausted");
         require(msg.value >= Cost * _mintAmount, "Wrong value");
         uint256 Supply = totalSupply();
+        Devs.transfer(Share);
+        total_value += msg.value;
+        total_value -= Share;
 
         for (uint256 i = 1; i <= _mintAmount; i++) {
             _safeMint(to, Supply + i);
