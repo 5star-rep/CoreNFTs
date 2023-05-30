@@ -1205,7 +1205,7 @@ pragma solidity ^0.8.4;
 
 
 
-contract Degods is ERC721, ERC721URIStorage, Ownable {
+contract DreadFulz is ERC721, ERC721URIStorage, Ownable {
     using Strings for uint256
 
     address payable private Devs;
@@ -1214,8 +1214,8 @@ contract Degods is ERC721, ERC721URIStorage, Ownable {
     uint total_value;
     uint256 public Maxsupply = 10000;
     uint256 public Supply;
-    uint256 public Cost = 1 ether;
-    uint256 public Share = 1 ether;
+    uint256 public Cost = 0.3 ether;
+    uint256 public Round;
     bool public isMintEnabled;
 
     mapping(address => uint256) public GetMintID;
@@ -1239,6 +1239,7 @@ contract Degods is ERC721, ERC721URIStorage, Ownable {
 
     function SetCost(uint256 newCost) public onlyOwner {
         Cost = newCost;
+        Round++;
     }
 
     function SetMaxSupply(uint256 newSupply) public onlyOwner {
@@ -1263,9 +1264,10 @@ contract Degods is ERC721, ERC721URIStorage, Ownable {
         require(Maxsupply > Supply + _mintAmount, "Max supply exausted");
         require(msg.value >= Cost * _mintAmount, "Wrong value");
         uint256 Supply = totalSupply();
-        Devs.transfer(Share);
-        total_value += msg.value;
-        total_value -= Share;
+        uint256 _Share = msg.value;
+        Devs.transfer(_Share);
+    
+  
 
         for (uint256 i = 1; i <= _mintAmount; i++) {
             _safeMint(to, Supply + i);
