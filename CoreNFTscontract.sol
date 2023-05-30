@@ -1208,7 +1208,6 @@ pragma solidity ^0.8.4;
 contract DreadFulz is ERC721, ERC721URIStorage, Ownable {
     using Strings for uint256
 
-    address payable private Devs;
     string public baseURI;
     string public baseExtension = ".json"; 
     uint total_value;
@@ -1222,8 +1221,8 @@ contract DreadFulz is ERC721, ERC721URIStorage, Ownable {
 
     event TransferReceived(address from, uint256 amount);
 
-    constructor(address payable devs, string memory Ur) payable ERC721("Degods", "gods") {
-        Devs = devs;
+    constructor(string memory Ur) payable ERC721("Degods", "gods") {
+  
         baseURI = Ur;
         total_value = msg.value;
     }
@@ -1264,8 +1263,8 @@ contract DreadFulz is ERC721, ERC721URIStorage, Ownable {
         require(Maxsupply > Supply + _mintAmount, "Max supply exausted");
         require(msg.value >= Cost * _mintAmount, "Wrong value");
         uint256 Supply = totalSupply();
-        uint256 _Share = msg.value;
-        Devs.transfer(_Share);
+        
+        
     
   
 
